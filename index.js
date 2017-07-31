@@ -359,15 +359,10 @@ class SortableGrid extends Component {
 
   _saveItemOrder = (items) => {
     items.forEach( (item, index) => {
-      const foundKey = _.findKey(this.itemOrder, oldItem => oldItem.key === item.key);
-
-      if (foundKey) {
-        this.items[foundKey] = item;
-      }
-      else {
-        this.itemOrder.push({ key: item.key, ref: item.ref, order: this.items.length });
+      if (!_.findKey(this.itemOrder, (oldItem) => oldItem.key === item.key)) {
+        this.itemOrder.push({ key: item.key, ref: item.ref, order: this.items.length })
         if (!this.initialLayoutDone) {
-          this.items.push(item);
+          this.items.push(item)
         }
         else {
           let blockPositions = this.state.blockPositions
@@ -449,12 +444,12 @@ class SortableGrid extends Component {
 
   _defaultDragActivationWiggle = () => {
     if (!this.dragStartAnimation) {
-      this.state.startDragWiggle.setValue(20)
+      this.state.startDragWiggle.setValue(10)
       Animated.spring(this.state.startDragWiggle, {
         toValue: 0,
-        velocity: 2000,
-        tension: 2000,
-        friction: 5
+        velocity: 500,
+        tension: 200,
+        friction: 20
       }).start()
     }
   }
@@ -556,7 +551,7 @@ class SortableGrid extends Component {
 
   _getBlockStyle = (key) => [
     { width: this.state.blockWidth,
-      height: this.state.blockWidth,
+      height: '50%',
       justifyContent: 'center' },
     this._blockPositionsSet() && (this.initialDragDone || this.state.deleteModeOn) &&
     { position: 'absolute',
